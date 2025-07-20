@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snapscrab</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Snapscrab</h1>
+        <input type="file" id="image-input" accept="image/*">
+        <img id="image-preview" src="#" alt="Image Preview" style="opacity: 0;">
+        <button id="submit-btn" disabled>Submit</button>
+    </div>
+
+    <script>
+        if (localStorage.getItem('isLoggedIn') !== 'true') {
+            window.location.href = 'login.html';  
+        }
+
+        document.getElementById('image-input').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.getElementById('image-preview');
+                    img.src = e.target.result;
+                    img.style.opacity = '1';
+                    document.getElementById('submit-btn').disabled = false;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        document.getElementById('submit-btn').addEventListener('click', function() {
+            const imgSrc = document.getElementById('image-preview').src;
+            localStorage.setItem('uploadedImage', imgSrc); 
+            window.location.href = 'image-explanation.html'; 
+        });
+    </script>
+</body>
+</html>
